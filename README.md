@@ -20,6 +20,9 @@ https://youtu.be/L3KFoq3Snt8
 (go to description for link)
 Can also use any other VM or install separately
 
+References
+-----------
+https://github.com/spring-projects/spring-hadoop-samples
 
 
 
