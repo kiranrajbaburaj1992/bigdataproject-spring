@@ -14,6 +14,9 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.Delete;
+import org.apache.hadoop.hbase.client.Get;
+import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
@@ -45,8 +48,8 @@ public class HomeController {
 		for(Result res : scanner1) {
 			list.add(res.toString());
 			System.out.println(Bytes.toString(res.getRow()));
-			System.out.println(Bytes.toString(res.getValue("cf1".getBytes(), "column1".getBytes())));
-			System.out.println(Bytes.toString(res.getValue("cf1".getBytes(),"column2".getBytes())));
+			System.out.println(Bytes.toString(res.getValue("personal".getBytes(), "name".getBytes())));
+			System.out.println(Bytes.toString(res.getValue("personal".getBytes(),"salary".getBytes())));
 
 		}
 		scanner1.close();
@@ -54,7 +57,41 @@ public class HomeController {
 		
 		
 
-		// Put Object
+		// Put Object for update also
+		
+		Put put = new Put("7".getBytes());
+
+		put.addColumn("personal".getBytes(), "name".getBytes(), "value1".getBytes());
+		put.addColumn("personal".getBytes(), "salary".getBytes(), "value2".getBytes());
+		
+		table.put(put);
+		
+		
+		// Get Object
+		
+		Get get = new Get("3".getBytes());
+		Result getResult = table.get(get);
+		System.out.println(getResult);
+		System.out.println(Bytes.toString(getResult.getValue("personal".getBytes(), "name".getBytes())));
+		System.out.println(Bytes.toString(getResult.getValue("personal".getBytes(),"salary".getBytes())));
+		
+		
+		//Delete Object
+		Delete del = new Delete("1".getBytes());
+		table.delete(del);
+		
+		list = new ArrayList<String>();
+		scanner1 = table.getScanner(scan1);
+		for(Result res : scanner1) {
+			list.add(res.toString());
+			System.out.println(Bytes.toString(res.getRow()));
+			System.out.println(Bytes.toString(res.getValue("personal".getBytes(), "name".getBytes())));
+			System.out.println(Bytes.toString(res.getValue("personal".getBytes(),"salary".getBytes())));
+
+		}
+		
+		scanner1.close();
+		
 		
 		}catch(Exception e) {
 			
