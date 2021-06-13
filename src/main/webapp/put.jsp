@@ -30,7 +30,7 @@
 			<div class="row">
 
 				<div class="col-lg-12">
-					<h1 class="page-header">Add a row</h1>
+					<h1 class="page-header">Put a row</h1>
 					<div class="alert alert-info"
 						style="background-color: #f9f9f9; border: 1px solid #ddd; color: #444">
 						Enter the values</div>

@@ -53,7 +53,7 @@
 						
 						
 						<div class="col-lg-4 dashboard-box">
-							<a href="/add">
+							<a href="/create">
 								<div class="inner-dashboard-box">
 									<i class="fa fa-fw fa-plus"></i>
 									<h3>Add Table</h3>

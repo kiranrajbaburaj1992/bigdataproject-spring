@@ -16,63 +16,69 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.bigdataproj.springboot.model.TweetsUser;
-import com.bigdataproj.springboot.service.TweetsService;
+import com.bigdataproj.springboot.service.TableService;
 
 @Controller
 public class HomeController {
 
 	@Autowired
-	TweetsService tweetsService;
+	TableService tableService;
 
 	@RequestMapping(value = { "/" }, method = RequestMethod.GET)
 	public String home(Model model) {
 
-		List<TweetsUser> list = new ArrayList<TweetsUser>();
-		List<String> tables = tweetsService.getTables();
+		List<String> tables = tableService.getTables();
 		model.addAttribute("tables",tables);
-		model.addAttribute("lists",list);
 		return "home";
 	}
-	
+
+
 	@RequestMapping(value = "/list/{tablename}" , method = RequestMethod.GET)
 	public String list(Model model,@PathVariable("tablename") String tablename) {
 
-		model.addAttribute("lists", tweetsService.getTweetsUsers());
-		List<String> tables = tweetsService.getTables();
+		model.addAttribute("lists", tableService.getTableRows(tablename));
+		List<String> tables = tableService.getTables();
 		model.addAttribute("tablename", tablename);
 		model.addAttribute("tables", tables);
 		return "list";
 	}
-	
-	@RequestMapping(value = { "/add" }, method = RequestMethod.GET)
-	public String add(Model model) {
 
-		List<TweetsUser> list = new ArrayList<TweetsUser>();
-		model.addAttribute("lists", list);
-		List<String> tables = tweetsService.getTables();
+
+	@RequestMapping(value = { "/put/{tablename}" }, method = RequestMethod.GET)
+	public String put(Model model,@PathVariable("tablename") String tablename) {
+
+		List<String> tables = tableService.getTables();
 		model.addAttribute("tables", tables);
-		return "add";
+		return "put";
+	}
+	
+	@RequestMapping(value = { "/create" }, method = RequestMethod.GET)
+	public String create(Model model) {
+
+		List<String> tables = tableService.getTables();
+		model.addAttribute("tables", tables);
+		return "create";
 	}
 
-	
+
 	@RequestMapping(value = "/delete/{tablename}/{rowid}" , method = RequestMethod.GET)
 	public String deleteRow(@PathVariable("tablename") String tablename,@PathVariable("rowid") String rowid, RedirectAttributes redirectAttributes) {
 
-		tweetsService.deleteTable(tablename, rowid);
+		tableService.deleteTable(tablename, rowid);
 		redirectAttributes.addFlashAttribute("tablename", tablename);
 		return "redirect:/list/"+tablename;
 	}
 	
 	
-	
-	
-//	@GetMapping({"/", "/hello"})
-//	public String  hello(@RequestParam(value = "name", defaultValue ="kiran",
-//		required=true) String name, Model model) {
-//		model.addAttribute("name",name);
-//		return "hello";
-//	}
+	@RequestMapping(value = "/get/{tablename}/{rowid}" , method = RequestMethod.GET)
+	public String getRow(Model model,@PathVariable("tablename") String tablename, @PathVariable("rowid") String rowid) {
+		model.addAttribute("map", tableService.getTableRow(tablename,rowid));
+		List<String> tables = tableService.getTables();
+		model.addAttribute("tablename", tablename);
+		model.addAttribute("rowid", rowid);
+		model.addAttribute("tables", tables);
+		return "list";
+	}
 
 }
 
