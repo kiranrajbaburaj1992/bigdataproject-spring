@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
@@ -61,6 +63,40 @@ public class TweetsManager implements TweetsService {
 		}
 
 		return list;
+	}
+
+	@Override
+	public List<String> getTables() {
+		
+		List<String> list = new ArrayList<String>();
+		try {
+		Connection connection = ConnectionFactory.createConnection(config.getconfig());
+		HTableDescriptor tableDescriptor[] = connection.getAdmin().listTables();
+		for (int i=0; i<tableDescriptor.length; i++) {
+			list.add(tableDescriptor[i].getNameAsString());
+        }
+		}catch(Exception e) {
+			System.out.print(e);
+		}
+		return list;
+	}
+
+	@Override
+	public boolean deleteTable(String tablename, String rowid) {
+		
+		try {
+			Connection connection = ConnectionFactory.createConnection(config.getconfig());
+			Table table = connection.getTable(TableName.valueOf(tablename));
+			
+			//Delete Object
+			Delete del = new Delete(rowid.getBytes());
+			table.delete(del);
+			return true;
+			
+		}catch(Exception e) {
+			System.out.print(e);
+		}
+		return false;
 	}
 
 
