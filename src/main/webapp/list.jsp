@@ -35,8 +35,13 @@
 						style="background-color: #f9f9f9; border: 1px solid #ddd; color: #444; overflow: auto; padding: 12px;">
 						<h4 style="float: left; margin-top: 8px;">Table :
 							${tablename}</h4>
-						<a class="btn btn-primary" href="/put/${tablename}" style="float: right;">Add
-							a row</a>
+						<form action="/delete/${tablename}" method="GET">
+							<input type="button" class="btn btn-danger"
+								onclick="confirmDelete(this.form)" value="Delete Table"
+								style="float: right; margin-left: 10px;"></input>
+						</form>
+						<a class="btn btn-primary" href="/put/${tablename}"
+							style="float: right;">Add a row</a>
 					</div>
 				</div>
 				<div class="col-lg-12">
@@ -56,10 +61,11 @@
 										<c:forEach var="entry" items="${map}" varStatus="_status">
 											<c:if test="${_status.count eq 1}">
 												<td><a href="/delete/${tablename}/${entry.value}"
-													class="btn btn-xs btn-danger"><i class="fa fa-fw fa-trash-o"></i></a></td>
+													class="btn btn-xs btn-danger"><i
+														class="fa fa-fw fa-trash-o"></i></a></td>
 											</c:if>
 										</c:forEach>
-										
+
 										<c:forEach items="${map}" var="entry">
 											<td><c:out value="${entry.value}" /></td>
 										</c:forEach>
@@ -76,6 +82,19 @@
 	<footer id="footer" class="footer hidden-print"
 		ng-include="'partials/footer.html'"
 		ng-if="location.path() !== '/login'"></footer>
+
+	<script>
+
+		function confirmDelete(form){
+			var r = confirm("Are you sure you want to delete this table?");
+			if(r==true){
+				form.submit();
+			} else{
+				return;
+			}
+		}
+		
+	</script>
 
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>

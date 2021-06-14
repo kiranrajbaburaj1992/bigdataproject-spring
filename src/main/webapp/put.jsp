@@ -24,7 +24,7 @@
 <body>
 
 	<jsp:include page="partials/header.jsp" />
-	
+
 	<div id="wrapper">
 		<div id="page-wrapper">
 			<div class="row">
@@ -33,45 +33,28 @@
 					<h1 class="page-header">Put a row</h1>
 					<div class="alert alert-info"
 						style="background-color: #f9f9f9; border: 1px solid #ddd; color: #444">
-						Enter the values</div>
+						Enter the value of ${tablename}</div>
 				</div>
 				<div class="col-lg-12">
 
-					<form>
+					<form action="/put/${tablename}" method="POST">
 						<div class="form-group">
-							<label for="exampleFormControlInput1">Email address</label> <input
-								type="email" class="form-control" id="exampleFormControlInput1"
-								placeholder="name@example.com">
+							<label for="rowid">Row #Id</label> <input
+								type="text" class="form-control" name="rowid" id="rowid"
+								placeholder="Row Id" required>
 						</div>
 						<div class="form-group">
-							<label for="exampleFormControlSelect1">Example select</label> <select
-								class="form-control" id="exampleFormControlSelect1">
-								<option>1</option>
-								<option>2</option>
-								<option>3</option>
-								<option>4</option>
-								<option>5</option>
-							</select>
+							<label for="cf">Column Qualifier</label> <input
+								type="text" class="form-control" name="cf" id="cf"
+								placeholder="Column Qualifier" required>
 						</div>
 						<div class="form-group">
-							<label for="exampleFormControlSelect2">Example multiple
-								select</label> <select multiple class="form-control"
-								id="exampleFormControlSelect2">
-								<option>1</option>
-								<option>2</option>
-								<option>3</option>
-								<option>4</option>
-								<option>5</option>
-							</select>
+							<label for="cfvalue">Column Value</label> <input
+								type="text" class="form-control" name="cfvalue" id="cfvalue"
+								placeholder="Column Qualifier" required>
 						</div>
 						<div class="form-group">
-							<label for="exampleFormControlTextarea1">Example textarea</label>
-							<textarea class="form-control" id="exampleFormControlTextarea1"
-								rows="3"></textarea>
-						</div>
-
-						<div class="form-group">
-							<button type="button" class="btn btn-primary">Add row</button>
+							<input type="submit" class="btn btn-primary" value="Add/Put row"></button>
 						</div>
 					</form>
 

@@ -33,45 +33,31 @@
 					<h1 class="page-header">Create Table</h1>
 					<div class="alert alert-info"
 						style="background-color: #f9f9f9; border: 1px solid #ddd; color: #444">
-						Enter the values</div>
+						Enter the table name & column families</div>
 				</div>
 				<div class="col-lg-12">
 
-					<form>
+					<form action="/create/table" method="POST">
 						<div class="form-group">
-							<label for="exampleFormControlInput1">Email address</label> <input
-								type="email" class="form-control" id="exampleFormControlInput1"
-								placeholder="name@example.com">
+							<label for="tablename">Table Name</label> <input
+								type="text" class="form-control" name="tablename" id="tablename"
+								placeholder="Table Name">
 						</div>
+						
+						<div id="inputBox">
 						<div class="form-group">
-							<label for="exampleFormControlSelect1">Example select</label> <select
-								class="form-control" id="exampleFormControlSelect1">
-								<option>1</option>
-								<option>2</option>
-								<option>3</option>
-								<option>4</option>
-								<option>5</option>
-							</select>
+							<label for="cf">Column Family</label> <input
+								type="text" class="form-control" name="cf[]" id="cf0"
+								placeholder="Column family">
 						</div>
-						<div class="form-group">
-							<label for="exampleFormControlSelect2">Example multiple
-								select</label> <select multiple class="form-control"
-								id="exampleFormControlSelect2">
-								<option>1</option>
-								<option>2</option>
-								<option>3</option>
-								<option>4</option>
-								<option>5</option>
-							</select>
 						</div>
+						
 						<div class="form-group">
-							<label for="exampleFormControlTextarea1">Example textarea</label>
-							<textarea class="form-control" id="exampleFormControlTextarea1"
-								rows="3"></textarea>
+						<input type="button" class="btn btn-primary" value="Add more" onclick="addmore()">
 						</div>
-
+						
 						<div class="form-group">
-							<button type="button" class="btn btn-primary">Add row</button>
+							<input type="submit" class="btn btn-primary" value="Create Table"></button>
 						</div>
 					</form>
 
@@ -83,6 +69,19 @@
 	<footer id="footer" class="footer hidden-print"
 		ng-include="'partials/footer.html'"
 		ng-if="location.path() !== '/login'"></footer>
+		
+		
+	<script>
+		var no = 1;
+		function addmore() {
+			var options = '<div class="form-group">'
+					+ '<label for="cf'+no+'">Column Family</label>'
+					+ '<input	type="text" class="form-control" name="cf[]" id="cf'+no+'"placeholder="Column family">'
+					+ '</div>';
+			document.getElementById('inputBox').innerHTML += options;
+			systems++;
+		}
+	</script>	
 
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>

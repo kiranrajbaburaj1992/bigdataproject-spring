@@ -1,24 +1,28 @@
 package com.bigdataproj.springboot.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.hadoop.conf.Configuration;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.hadoop.hbase.Cell;
-import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.ColumnFamilyDescriptor;
+import org.apache.hadoop.hbase.client.ColumnFamilyDescriptorBuilder;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Get;
+import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.TableDescriptor;
+import org.apache.hadoop.hbase.client.TableDescriptorBuilder;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +32,9 @@ public class TableManager implements TableService {
 
 	@Autowired
 	AppConfig config;
+
+	@Autowired
+	HbaseMetaData hbaseMetaData;
 
 	@Override
 	public List<LinkedHashMap<String,String>> getTableRows(String tablename) {
@@ -98,19 +105,40 @@ public class TableManager implements TableService {
 	}
 
 	@Override
+	public boolean deleteTable(String tablename) {
+
+		try {
+			Connection connection = ConnectionFactory.createConnection(config.getconfig());
+
+			// Delete Table
+			Admin admin = connection.getAdmin();
+			TableName tableName = TableName.valueOf(tablename);
+			admin.disableTable(tableName);
+			admin.deleteTable(tableName);
+
+			return true;
+
+		}catch(Exception e) {
+			System.out.print(e);
+		}
+		return false;
+
+	}
+
+	@Override
 	public LinkedHashMap<String, String> getTableRow(String tablename, String rowid) {
 
 		LinkedHashMap<String,String> map = new LinkedHashMap<String,String>();
-		
+
 		try {
 			Connection connection = ConnectionFactory.createConnection(config.getconfig());
 			Table table = connection.getTable(TableName.valueOf(tablename));
 			Get get = new Get(rowid.getBytes());
 			Result getResult = table.get(get);
-//			System.out.println(getResult);
-//			System.out.println(Bytes.toString(getResult.getValue("name".getBytes(), "fname".getBytes())));
-//			System.out.println(Bytes.toString(getResult.getValue("salary".getBytes(),"ctc".getBytes())));
-			
+			//			System.out.println(getResult);
+			//			System.out.println(Bytes.toString(getResult.getValue("name".getBytes(), "fname".getBytes())));
+			//			System.out.println(Bytes.toString(getResult.getValue("salary".getBytes(),"ctc".getBytes())));
+
 			map.put("id",rowid);
 			for(Cell cell : getResult.listCells()) {
 				String qualifier = Bytes.toString(cell.getQualifierArray(), cell.getQualifierOffset(), cell.getQualifierLength());
@@ -120,16 +148,78 @@ public class TableManager implements TableService {
 
 				map.put(qualifier,value);
 			}
-			
+
 		}catch(Exception e) {
 			System.out.print(e);
 		}
 		return map;
+
+	}
+
+	@Override
+	public void getColumnFamilies(String tablename) {
+
+		try {
+			for (String column : hbaseMetaData  .getColumns(tablename, 10000)) {
+				System.out.println(tablename + "," + column);
+			}
+
+		}catch(Exception e) {
+			System.out.print(e);
+		}
+
+	}
+
+	@Override
+	public void putRow(String tablename, HttpServletRequest request) {
+
+		// Put Object for update also
+		try {
+			Connection connection = ConnectionFactory.createConnection(config.getconfig());
+			Table table = connection.getTable(TableName.valueOf(tablename));
+			
+			String rowId = request.getParameter("rowid");
+			String columnFamily = request.getParameter("cf");
+			String columnFamilyValue = request.getParameter("cfvalue");
+			
+			String[] cf = columnFamily.split(":",2);
+			
+			Put put = new Put(rowId.getBytes());
+			put.addColumn(cf.length>0?cf[0].getBytes():"".getBytes(), cf.length>1?cf[1].getBytes():"".getBytes(), columnFamilyValue.getBytes());
+			table.put(put);
+			
+		}catch(Exception e) {
+			System.out.print(e);
+		}
+
+	}
+
+	@Override
+	public void createTable(HttpServletRequest request) {
+
+		// Put Object for creation 
+		try {
+			Connection connection = ConnectionFactory.createConnection(config.getconfig());
+			
+			String tablename = request.getParameter("tablename");
+			String[] cf = request.getParameterValues("cf[]");
+
+			TableDescriptorBuilder tableDescriptorBuilder =
+				    TableDescriptorBuilder.newBuilder(TableName.valueOf(tablename));
+			
+			for (String column : cf) {
+				ColumnFamilyDescriptor columnFamilyDescriptor = ColumnFamilyDescriptorBuilder
+					    .newBuilder(Bytes.toBytes(column)).build();
+				tableDescriptorBuilder.addColumnFamily(columnFamilyDescriptor);
+			}
+			
+			connection.getAdmin().createTable(tableDescriptorBuilder.build()); 
+			
+			
+		}catch(Exception e) {
+			System.out.print(e);
+		}
 		
 	}
-	
-	
-	
-
 
 }
