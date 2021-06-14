@@ -41,8 +41,7 @@ public class TableManager implements TableService {
 
 		List<LinkedHashMap<String,String>> list = new ArrayList<LinkedHashMap<String,String>>();
 		try {
-			Connection connection = ConnectionFactory.createConnection(config.getconfig());
-			Table table = connection.getTable(TableName.valueOf(tablename));
+			Table table = config.getConnection().getTable(TableName.valueOf(tablename));
 			Scan scan1 = new Scan();
 			ResultScanner scanner1 = table.getScanner(scan1);
 			
@@ -72,7 +71,6 @@ public class TableManager implements TableService {
 			}
 
 			scanner1.close();
-			connection.close();
 
 		}catch(Exception e) {
 			System.out.print(e);
@@ -86,12 +84,10 @@ public class TableManager implements TableService {
 
 		List<String> list = new ArrayList<String>();
 		try {
-			Connection connection = ConnectionFactory.createConnection(config.getconfig());
-			HTableDescriptor tableDescriptor[] = connection.getAdmin().listTables();
+			HTableDescriptor tableDescriptor[] = config.getConnection().getAdmin().listTables();
 			for (int i=0; i<tableDescriptor.length; i++) {
 				list.add(tableDescriptor[i].getNameAsString());
 			}
-			connection.close();
 		}catch(Exception e) {
 			System.out.print(e);
 		}
@@ -102,14 +98,12 @@ public class TableManager implements TableService {
 	public boolean deleteTable(String tablename, String rowid) {
 
 		try {
-			Connection connection = ConnectionFactory.createConnection(config.getconfig());
-			Table table = connection.getTable(TableName.valueOf(tablename));
+			Table table = config.getConnection().getTable(TableName.valueOf(tablename));
 
 			//Delete Object
 			Delete del = new Delete(rowid.getBytes());
 			table.delete(del);
 			
-			connection.close();
 			return true;
 
 		}catch(Exception e) {
@@ -122,15 +116,13 @@ public class TableManager implements TableService {
 	public boolean deleteTable(String tablename) {
 
 		try {
-			Connection connection = ConnectionFactory.createConnection(config.getconfig());
 
 			// Delete Table
-			Admin admin = connection.getAdmin();
+			Admin admin = config.getConnection().getAdmin();
 			TableName tableName = TableName.valueOf(tablename);
 			admin.disableTable(tableName);
 			admin.deleteTable(tableName);
 
-			connection.close();
 			return true;
 
 		}catch(Exception e) {
@@ -146,8 +138,7 @@ public class TableManager implements TableService {
 		LinkedHashMap<String,String> map = new LinkedHashMap<String,String>();
 
 		try {
-			Connection connection = ConnectionFactory.createConnection(config.getconfig());
-			Table table = connection.getTable(TableName.valueOf(tablename));
+			Table table = config.getConnection().getTable(TableName.valueOf(tablename));
 			Get get = new Get(rowid.getBytes());
 			Result getResult = table.get(get);
 			//			System.out.println(getResult);
@@ -163,9 +154,6 @@ public class TableManager implements TableService {
 
 				map.put(qualifier,value);
 			}
-			
-
-			connection.close();
 
 		}catch(Exception e) {
 			System.out.print(e);
@@ -182,15 +170,12 @@ public class TableManager implements TableService {
 //			for (String column : hbaseMetaData  .getColumns(tablename, 10000)) {
 //				System.out.println(tablename + "," + column);
 //			}
-			Connection connection = ConnectionFactory.createConnection(config.getconfig());
-			Table table = connection.getTable(TableName.valueOf(tablename));
+			Table table = config.getConnection().getTable(TableName.valueOf(tablename));
 			ColumnFamilyDescriptor[] cfs = table.getDescriptor().getColumnFamilies();
 			for (ColumnFamilyDescriptor columnFamilyDescriptor : cfs) {
 				String qualifier = columnFamilyDescriptor.getNameAsString();
 				mapHeader.put(qualifier,null);
 			}
-			
-			connection.close();
 
 		}catch(Exception e) {
 			System.out.print(e);
@@ -204,8 +189,7 @@ public class TableManager implements TableService {
 
 		// Put Object for update also
 		try {
-			Connection connection = ConnectionFactory.createConnection(config.getconfig());
-			Table table = connection.getTable(TableName.valueOf(tablename));
+			Table table = config.getConnection().getTable(TableName.valueOf(tablename));
 			
 			String rowId = request.getParameter("rowid");
 			String columnFamily = request.getParameter("cf");
@@ -216,9 +200,6 @@ public class TableManager implements TableService {
 			Put put = new Put(rowId.getBytes());
 			put.addColumn(cf.length>0?cf[0].getBytes():"".getBytes(), cf.length>1?cf[1].getBytes():"".getBytes(), columnFamilyValue.getBytes());
 			table.put(put);
-			
-
-			connection.close();
 			
 		}catch(Exception e) {
 			System.out.print(e);
@@ -231,7 +212,6 @@ public class TableManager implements TableService {
 
 		// Put Object for creation 
 		try {
-			Connection connection = ConnectionFactory.createConnection(config.getconfig());
 			
 			String tablename = request.getParameter("tablename");
 			String[] cf = request.getParameterValues("cf[]");
@@ -245,9 +225,7 @@ public class TableManager implements TableService {
 				tableDescriptorBuilder.addColumnFamily(columnFamilyDescriptor);
 			}
 			
-			connection.getAdmin().createTable(tableDescriptorBuilder.build()); 
-
-			connection.close();
+			config.getConnection().getAdmin().createTable(tableDescriptorBuilder.build()); 
 			
 		}catch(Exception e) {
 			System.out.print(e);

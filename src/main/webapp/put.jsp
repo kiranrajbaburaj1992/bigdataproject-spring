@@ -57,7 +57,7 @@
 						<div class="form-group">
 							<label for="cfvalue">Column Value</label> <input
 								type="text" class="form-control" name="cfvalue" id="cfvalue"
-								placeholder="Column Qualifier" required>
+								placeholder="Column Value" required>
 						</div>
 						<div class="form-group">
 							<input type="submit" class="btn btn-primary" value="Add/Put row"></button>
