@@ -33,7 +33,13 @@
 					<h1 class="page-header">Put a row</h1>
 					<div class="alert alert-info"
 						style="background-color: #f9f9f9; border: 1px solid #ddd; color: #444">
-						Enter the value of ${tablename}</div>
+						Enter the value of ${tablename} with column families<br/> 
+						<ul>
+						<c:forEach var="entry" items="${map}" varStatus="_status">
+							<li>${entry.key}</li>
+						</c:forEach>
+						</ul>
+						</div>
 				</div>
 				<div class="col-lg-12">
 

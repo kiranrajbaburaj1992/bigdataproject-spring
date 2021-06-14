@@ -56,7 +56,8 @@
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach items="${lists}" var="map">
+								<c:forEach items="${lists}" var="map" varStatus="state">
+									<!--<c:if test="${not state.first}">-->
 									<tr>
 										<c:forEach var="entry" items="${map}" varStatus="_status">
 											<c:if test="${_status.count eq 1}">
@@ -70,6 +71,7 @@
 											<td><c:out value="${entry.value}" /></td>
 										</c:forEach>
 									</tr>
+									<!--</c:if>-->
 								</c:forEach>
 							</tbody>
 						</table>

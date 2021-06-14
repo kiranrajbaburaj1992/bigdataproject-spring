@@ -1,6 +1,7 @@
 package com.bigdataproj.springboot.controller;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,8 +53,9 @@ public class HomeController {
 
 		List<String> tables = tableService.getTables();
 		//tableService.putRow(tablename);
-		//tableService.getColumnFamilies(tablename);
+		LinkedHashMap<String, String> map = tableService.getColumnFamilies(tablename);
 		model.addAttribute("tables", tables);
+		model.addAttribute("map", map);
 		return "put";
 	}
 	

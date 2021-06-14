@@ -45,8 +45,18 @@ public class TableManager implements TableService {
 			Table table = connection.getTable(TableName.valueOf(tablename));
 			Scan scan1 = new Scan();
 			ResultScanner scanner1 = table.getScanner(scan1);
+			
+			// to add header
+//			ColumnFamilyDescriptor[] cfs = table.getDescriptor().getColumnFamilies();
+//			LinkedHashMap<String,String> mapHeader = new LinkedHashMap<String,String>();
+//			mapHeader.put("id",null);
+//			for (ColumnFamilyDescriptor columnFamilyDescriptor : cfs) {
+//				String qualifier = columnFamilyDescriptor.getNameAsString();
+//				mapHeader.put(qualifier,null);
+//			}
+//			list.add(mapHeader);
 
-
+			//real data
 			for (Result result = scanner1.next(); (result != null); result = scanner1.next()) {
 				LinkedHashMap<String,String> map = new LinkedHashMap<String,String>();
 				map.put("id",Bytes.toString(result.getRow()));
@@ -62,6 +72,7 @@ public class TableManager implements TableService {
 			}
 
 			scanner1.close();
+			connection.close();
 
 		}catch(Exception e) {
 			System.out.print(e);
@@ -80,6 +91,7 @@ public class TableManager implements TableService {
 			for (int i=0; i<tableDescriptor.length; i++) {
 				list.add(tableDescriptor[i].getNameAsString());
 			}
+			connection.close();
 		}catch(Exception e) {
 			System.out.print(e);
 		}
@@ -96,6 +108,8 @@ public class TableManager implements TableService {
 			//Delete Object
 			Delete del = new Delete(rowid.getBytes());
 			table.delete(del);
+			
+			connection.close();
 			return true;
 
 		}catch(Exception e) {
@@ -116,6 +130,7 @@ public class TableManager implements TableService {
 			admin.disableTable(tableName);
 			admin.deleteTable(tableName);
 
+			connection.close();
 			return true;
 
 		}catch(Exception e) {
@@ -148,6 +163,9 @@ public class TableManager implements TableService {
 
 				map.put(qualifier,value);
 			}
+			
+
+			connection.close();
 
 		}catch(Exception e) {
 			System.out.print(e);
@@ -157,17 +175,28 @@ public class TableManager implements TableService {
 	}
 
 	@Override
-	public void getColumnFamilies(String tablename) {
+	public LinkedHashMap<String,String> getColumnFamilies(String tablename) {
 
+		LinkedHashMap<String,String> mapHeader = new LinkedHashMap<String,String>();
 		try {
-			for (String column : hbaseMetaData  .getColumns(tablename, 10000)) {
-				System.out.println(tablename + "," + column);
+//			for (String column : hbaseMetaData  .getColumns(tablename, 10000)) {
+//				System.out.println(tablename + "," + column);
+//			}
+			Connection connection = ConnectionFactory.createConnection(config.getconfig());
+			Table table = connection.getTable(TableName.valueOf(tablename));
+			ColumnFamilyDescriptor[] cfs = table.getDescriptor().getColumnFamilies();
+			for (ColumnFamilyDescriptor columnFamilyDescriptor : cfs) {
+				String qualifier = columnFamilyDescriptor.getNameAsString();
+				mapHeader.put(qualifier,null);
 			}
+			
+			connection.close();
 
 		}catch(Exception e) {
 			System.out.print(e);
 		}
-
+		
+		return mapHeader;
 	}
 
 	@Override
@@ -187,6 +216,9 @@ public class TableManager implements TableService {
 			Put put = new Put(rowId.getBytes());
 			put.addColumn(cf.length>0?cf[0].getBytes():"".getBytes(), cf.length>1?cf[1].getBytes():"".getBytes(), columnFamilyValue.getBytes());
 			table.put(put);
+			
+
+			connection.close();
 			
 		}catch(Exception e) {
 			System.out.print(e);
@@ -214,7 +246,8 @@ public class TableManager implements TableService {
 			}
 			
 			connection.getAdmin().createTable(tableDescriptorBuilder.build()); 
-			
+
+			connection.close();
 			
 		}catch(Exception e) {
 			System.out.print(e);

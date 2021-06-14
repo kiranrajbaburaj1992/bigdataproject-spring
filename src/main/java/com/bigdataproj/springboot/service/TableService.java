@@ -18,7 +18,7 @@ public interface TableService {
 	
 	public LinkedHashMap<String,String> getTableRow(String tablename, String rowid);
 
-	public void getColumnFamilies(String tablename);
+	public LinkedHashMap<String, String> getColumnFamilies(String tablename);
 
 	public void putRow(String tablename, HttpServletRequest request);
 
