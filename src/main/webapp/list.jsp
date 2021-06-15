@@ -82,7 +82,7 @@
 	</div>
 
 	<footer id="footer" class="footer hidden-print"
-		ng-include="'partials/footer.html'"
+		ng-include="'/partials/footer.html'"
 		ng-if="location.path() !== '/login'"></footer>
 
 	<script>
