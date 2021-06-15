@@ -66,7 +66,7 @@ public class HomeController {
 		tableService.putRow(tablename, request);
 		List<String> tables = tableService.getTables();
 		model.addAttribute("tables", tables);
-		return "redirect:/";
+		return "redirect:/list/"+tablename;
 	}
 	
 	@RequestMapping(value = { "/create" }, method = RequestMethod.GET)

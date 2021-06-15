@@ -60,12 +60,13 @@ public class TableManager implements TableService {
 				LinkedHashMap<String,String> map = new LinkedHashMap<String,String>();
 				map.put("id",Bytes.toString(result.getRow()));
 				for(Cell cell : result.listCells()) {
+					String cf = Bytes.toString(cell.getFamilyArray(), cell.getFamilyOffset(), cell.getFamilyLength());
 					String qualifier = Bytes.toString(cell.getQualifierArray(), cell.getQualifierOffset(), cell.getQualifierLength());
 					String value = Bytes.toString(cell.getValueArray(), cell.getValueOffset(), cell.getValueLength());
 					System.out.println("Qualifier : " + qualifier
 							+ " : Value : " + value);
 
-					map.put(qualifier,value);
+					map.put(cf+":"+qualifier,value);
 				}
 				list.add(map);
 			}

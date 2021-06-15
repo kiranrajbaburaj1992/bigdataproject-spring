@@ -56,11 +56,13 @@
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach items="${lists}" var="map" varStatus="state">
 									<!--<c:if test="${not state.first}">-->
+									<!--</c:if>-->
+								<c:forEach items="${lists}" var="map" varStatus="state">
 									<tr>
 										<c:forEach var="entry" items="${map}" varStatus="_status">
 											<c:if test="${_status.count eq 1}">
+												<c:set var="rowidval" scope="application" value="${entry.value}"/>
 												<td><a href="/delete/${tablename}/${entry.value}"
 													class="btn btn-xs btn-danger"><i
 														class="fa fa-fw fa-trash-o"></i></a></td>
@@ -68,10 +70,16 @@
 										</c:forEach>
 
 										<c:forEach items="${map}" var="entry">
-											<td><c:out value="${entry.value}" /></td>
+											<td>
+											<form action="/put/${tablename}" method="POST">
+											<input type="text" value="${entry.value}" name="cfvalue" style="background:none; border: 0px;padding: 6px;" onblur="this.form.submit()"/>
+											<input type="hidden" name="rowid" value="${rowidval}"/>
+											<input type="hidden" name="cf" value="${entry.key}"/>
+											</form>
+											<!--<c:out value="${entry.value}" />-->
+											</td>
 										</c:forEach>
 									</tr>
-									<!--</c:if>-->
 								</c:forEach>
 							</tbody>
 						</table>
