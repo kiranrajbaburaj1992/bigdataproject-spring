@@ -7,6 +7,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,7 +47,28 @@ public class HomeController {
 		List<String> tables = tableService.getTables();
 		model.addAttribute("tablename", tablename);
 		model.addAttribute("tables", tables);
+		String jsonArray = listmap_to_json_string(tableService.getTableRows(tablename));
+		model.addAttribute("jsonArray", jsonArray);
 		return "list";
+	}
+	
+	public String listmap_to_json_string(List<LinkedHashMap<String, String>> list)
+	{       
+	    JSONArray json_arr=new JSONArray();
+	    for (LinkedHashMap<String, String> map : list) {
+	        JSONObject json_obj=new JSONObject();
+	        for (Map.Entry<String, String> entry : map.entrySet()) {
+	            String key = entry.getKey();
+	            String value = entry.getValue();
+	            try {
+	                json_obj.put(key,value);
+	            } catch (JSONException e) {
+	                e.printStackTrace();
+	            }                           
+	        }
+	        json_arr.put(json_obj);
+	    }
+	    return json_arr.toString();
 	}
 
 

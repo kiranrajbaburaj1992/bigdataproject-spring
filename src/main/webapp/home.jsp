@@ -32,26 +32,30 @@
 					<h1 class="page-header">Twitter Analysis</h1>
 					<div class="alert alert-info"
 						style="background-color: #f9f9f9; border: 1px solid #ddd; color: #444">
-						A Project by <b><i>Kiran Raj, </i></b><b><i>Sanjana S
-								Krishna, </i></b><b><i>Ananthu Krishnan, </i></b><b><i>Sangeetha,
-						</i></b><b><i>Anurag Chowdhary, </i></b>
+						<span style="font-size: 17px; font-weight: 800; color: #00adff;">A
+							Project by </span>
+						<p style="font-size: 18px;">
+							<b><i>Kiran Raj, </i></b><b><i>Sanjana S Krishna, </i></b><b><i>Ananthu
+									Krishnan, </i></b><b><i>Sangeetha, </i></b><b><i>Anurag
+									Chowdhary </i></b>
+						</p>
 					</div>
 				</div>
 
 				<div class="col-lg-10 col-md-offset-1">
 					<div class="row">
 						<c:forEach items="${tables}" var="listValue">
-						<div class="col-lg-4 dashboard-box">
-							<a href="/list/${listValue}">
-								<div class="inner-dashboard-box">
-									<i class="fa fa-fw fa-database"></i>
-									<h5>${listValue}</h5>
-								</div>
-							</a>
-						</div>
+							<div class="col-lg-4 dashboard-box">
+								<a href="/list/${listValue}">
+									<div class="inner-dashboard-box">
+										<i class="fa fa-fw fa-database"></i>
+										<h5>${listValue}</h5>
+									</div>
+								</a>
+							</div>
 						</c:forEach>
-						
-						
+
+
 						<div class="col-lg-4 dashboard-box">
 							<a href="/create">
 								<div class="inner-dashboard-box">
@@ -60,7 +64,7 @@
 								</div>
 							</a>
 						</div>
-						
+
 					</div>
 				</div>
 			</div>

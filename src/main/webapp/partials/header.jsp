@@ -6,7 +6,7 @@
 			<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
 			<span class="icon-bar"></span> <span class="icon-bar"></span>
 		</button>
-		<img src="/images/logo-cp.png" />
+		<a href="/"><img src="/images/logo-cp.png" /></a>
 	</div>
 
 	<ul class="nav navbar-top-links navbar-right">
