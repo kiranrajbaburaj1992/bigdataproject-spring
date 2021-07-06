@@ -13,7 +13,7 @@
     display: block;
     color: #3a3a3a;
     font-size: 20px;
-">Data Visualizer</b>
+"><i class="fa fa-fw fa-signal"></i> Data Visualizer</b>
 	</div>
 
 	<ul class="nav navbar-top-links navbar-right">

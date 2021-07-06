@@ -29,7 +29,7 @@
 		<div id="page-wrapper">
 			<div class="row">
 				<div class="col-lg-12">
-					<h1 class="page-header">Twitter Analysis</h1>
+					<h1 class="page-header">Big Data Project</h1>
 					<div class="alert alert-info"
 						style="background-color: #f9f9f9; border: 1px solid #ddd; color: #444">
 						<span style="font-size: 17px; font-weight: 800; color: #00adff;">A
