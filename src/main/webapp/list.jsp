@@ -43,7 +43,7 @@
 						<a class="btn btn-primary" href="/put/${tablename}"
 							style="float: right;">Add a row</a>
 						<button disabled="disabled" class="btn btn-success" id="myBtn"
-							onclick='drawGraphs(${jsonArray});'
+							onclick='drawGraphs();'
 							style="float: right; margin-right: 10px;">Visualize</button>
 					</div>
 				</div>
@@ -199,6 +199,7 @@
 		});
 		//google.charts.setOnLoadCallback(drawChart);
 		function drawGraphs(arr) {
+			var arr = ${jsonArray};
 			var xaxislabel = xAxis;
 			var yaxislabel = yAxis;
 			var graphArr = [[xaxislabel, yaxislabel]];

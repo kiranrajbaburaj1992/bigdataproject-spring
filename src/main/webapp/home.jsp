@@ -35,9 +35,13 @@
 						<span style="font-size: 17px; font-weight: 800; color: #00adff;">A
 							Project by </span>
 						<p style="font-size: 18px;">
-							<b><i>Kiran Raj, </i></b><b><i>Sanjana S Krishna, </i></b><b><i>Ananthu
-									Krishnan, </i></b><b><i>Sangeetha, </i></b><b><i>Anurag
-									Chowdhary </i></b>
+						<ul style="list-style-type: disclosure-closed;">
+							<li><b><i>Kiran Raj</i></b></li>
+							<li><b><i>Sanjana S Krishna</i></b></li>
+							<li><b><i>Ananthu Krishnan</i></b></li>
+							<li><b><i>Sangeetha</i></b></li>
+							<li><b><i>Anurag Chowdhary</i></b></li>
+						</ul>
 						</p>
 					</div>
 				</div>

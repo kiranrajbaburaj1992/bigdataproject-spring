@@ -6,7 +6,14 @@
 			<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
 			<span class="icon-bar"></span> <span class="icon-bar"></span>
 		</button>
-		<a href="/"><img src="/images/logo-cp.png" /></a>
+		<!-- <a href="/"><img src="/images/logo-cp.png" /></a> -->
+		<b style="
+    margin-top: 10px;
+    margin-left: 20px;
+    display: block;
+    color: #3a3a3a;
+    font-size: 20px;
+">Data Visualizer</b>
 	</div>
 
 	<ul class="nav navbar-top-links navbar-right">
